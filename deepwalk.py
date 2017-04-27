@@ -157,8 +157,6 @@ class Conn:
             if self.g.has_node(node):
                 try:
                     y[i-year]=self.g.node[node]["ans"]
-                    print(y[i-year],end=" ")
-                    print(i)
                 except KeyError:
                     continue
             else:
@@ -172,37 +170,11 @@ class Conn:
         for node in self.g.nodes():
             item=node[:6]
             dic_node[item]=1
+        print(dic_node.__len__())
         i=1
         for k in dic_node.keys():
-            if i>9:
-                break
             x,y=self.display(k)
-            a=plt.subplot(3,3,i)
-            a.set_title(k)
-            a.plot(x,y)
-            i+=1
-
-        plt.show()
-        plt.savefig("data/"+str(i)+"my.png")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            yield x,y,k
 
 
 
@@ -230,10 +202,6 @@ class Conn:
                 max[2]=temp
                 max_node[2]=i
         return max_node
-
-
-
-
     def find_backward_node(self,node):
         max = [0, -1, -2]
         max_node = [node, node, node]
@@ -258,9 +226,42 @@ class Conn:
                 max[2] = temp
                 max_node[2] = i
         return max_node
+    def plot_connection(self,strl):
+
+        a=plt.subplot(1,2,1)
+        self.plot_vec(a,strl)
+        year=int(strl[6:])-1
+        new_node=strl[:6]+str(year)
+        b=plt.subplot(1,2,2)
+        self.plot_vec(b,new_node)
+        plt.show()
+    def plot_vec(self,plt_a,node):
+        bak_node = self.find_backward_node(node)
+        pre_node = self.find_forward_node(node)
+        for i in range(0, 3):
+            x = [self.g.node[bak_node[i]]["array_1"], self.g.node[node]["array_1"]]
+            y = [self.g.node[bak_node[i]]["array_2"], self.g.node[node]["array_2"]]
+            plt_a.plot(x, y)
+            print(x,end="   ")
+            print(y,end="\n")
+
+            x = [self.g.node[pre_node[i]]["array_1"], self.g.node[node]["array_1"]]
+            x = [self.g.node[pre_node[i]]["array_2"], self.g.node[node]["array_2"]]
+            plt_a.plot(x, y)
+            print(i)
+
+
+
+
+
+
+
 
 a=Conn()
-a.bat_display()
+a.plot_connection("MAGNET2004")
+
+
+
 
 
 
