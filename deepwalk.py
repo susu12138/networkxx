@@ -259,6 +259,7 @@ class Conn:
 
 a=Conn()
 a.plot_connection("MAGNET2004")
+#
 
 
 
