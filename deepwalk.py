@@ -261,7 +261,7 @@ class Conn:
 a=Conn()
 b=a.find_forward_node("MAGNET2004")
 a.plot_connection("MAGNET2004")
-#
+
 
 
 
