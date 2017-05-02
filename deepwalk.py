@@ -182,7 +182,8 @@ class Conn:
         max=[0,-1,-2]
         max_node=[node,node,node]
         for i in self.g.predecessors(node):
-            if i==node:
+            t=i[:6]
+            if t==node[:6] or t==max_node[0][:6] or t==max_node[1][:6] or t == max_node[2][:6]:
                 continue
             temp=self.g[i][node]["weight"]
 
@@ -206,7 +207,7 @@ class Conn:
         max = [0, -1, -2]
         max_node = [node, node, node]
         for i in self.g.successors(node):
-            if i==node:
+            if i[:6]==node[:6]:
                 continue
             temp = self.g[node][i]["weight"]
 
@@ -239,13 +240,13 @@ class Conn:
         bak_node = self.find_backward_node(node)
         pre_node = self.find_forward_node(node)
         for i in range(0, 3):
-            x = [self.g.node[bak_node[i]]["array_1"], self.g.node[node]["array_1"]]
+            x = [self.g.node[bak_node[i]]["array_3"], self.g.node[node]["array_3"]]
             y = [self.g.node[bak_node[i]]["array_2"], self.g.node[node]["array_2"]]
             plt_a.plot(x, y)
             print(x,end="   ")
             print(y,end="\n")
 
-            x = [self.g.node[pre_node[i]]["array_1"], self.g.node[node]["array_1"]]
+            x = [self.g.node[pre_node[i]]["array_3"], self.g.node[node]["array_3"]]
             x = [self.g.node[pre_node[i]]["array_2"], self.g.node[node]["array_2"]]
             plt_a.plot(x, y)
             print(i)
@@ -258,6 +259,7 @@ class Conn:
 
 
 a=Conn()
+b=a.find_forward_node("MAGNET2004")
 a.plot_connection("MAGNET2004")
 #
 
