@@ -144,6 +144,9 @@ class Conn:
                     c = c - g
                     ans += (a * a + b * b + c * c)
                 self.g.node[node]["ans"]=ans
+                vec=pre_vec[0]+" "+pre_vec[1]+" "+pre_vec[2]+" "+ bak_vec[0]+" "+bak_vec[1]+" "+bak_vec[2]
+
+                self.g.node[node]["vec"]=vec
                 print(node,end=" ")
                 print(ans)
 
@@ -183,11 +186,49 @@ class Conn:
         max_node=[node,node,node]
         for i in self.g.predecessors(node):
             t=i[:6]
-            if t==node[:6] or t==max_node[0][:6] or t==max_node[1][:6] or t == max_node[2][:6]:
+            if t==node[:6]:
                 continue
-            temp=self.g[i][node]["weight"]
+            temp = self.g[i][node]["weight"]
+            if t==max_node[0][:6] and temp>max[0]:
+                max_node[0]=i
+                max[0]=temp
+                continue
 
-            if temp>max[0]:
+            if t==max_node[1][:6]:
+                if temp>max[1] and temp<max[0]:
+                    max_node[1]=i
+                    max[1]=temp
+                    continue
+                elif temp>max[0]:
+                    max_node[1]=max_node[0]
+                    max[1]=max[0]
+                    max_node[0]=i
+                    max[0]=temp
+                    continue
+                else:
+                    continue
+            if t==max_node[2][:6]:
+                if temp>max[2] and temp<=max[1]:
+                    max_node[2]=i
+                    max[2]=temp
+                    continue
+                elif temp>max[1] and temp <=max[0]:
+                    max_node[2]=max_node[1]
+                    max[2]=max[1]
+                    max_node[1]=i
+                    max[1]=temp
+                    continue
+                elif temp>max[0]:
+                    max_node[2]=max_node[1]
+                    max[2]=max[1]
+                    max_node[1]=max_node[0]
+                    max[1]=max[0]
+                    max_node[0]=i
+                    max[0]=temp
+                    continue
+                else:
+                    continue
+            if max[0]<temp:
                 max[2]=max[1]
                 max[1]=max[0]
                 max[0]=temp
@@ -207,9 +248,45 @@ class Conn:
         max = [0, -1, -2]
         max_node = [node, node, node]
         for i in self.g.successors(node):
-            if i[:6]==node[:6]:
-                continue
+            t = i[:6]
             temp = self.g[node][i]["weight"]
+            if t==node[:6]:
+                continue
+            if t==max_node[0][:6] and temp>max[0]:
+                max_node[0]=i
+                max[0]=temp
+                continue
+
+            if t==max_node[1][:6]:
+                if temp>max[1] and temp<max[0]:
+                    max_node[1]=i
+                    max[1]=temp
+                    continue
+                elif temp>max[0]:
+                    max_node[1]=max_node[0]
+                    max[1]=max[0]
+                    max_node[0]=i
+                    max[0]=temp
+                    continue
+            if t==max_node[2][:6]:
+                if temp>max[2] and temp<=max[1]:
+                    max_node[2]=i
+                    max[2]=temp
+                    continue
+                elif temp>max[1] and temp <=max[0]:
+                    max_node[2]=max_node[1]
+                    max[2]=max[1]
+                    max_node[1]=i
+                    max[1]=temp
+                    continue
+                elif temp>max[0]:
+                    max_node[2]=max_node[1]
+                    max[2]=max[1]
+                    max_node[1]=max_node[0]
+                    max[1]=max[0]
+                    max_node[0]=i
+                    max[0]=temp
+                    continue
 
             if temp > max[0]:
                 max[2] = max[1]
@@ -259,10 +336,19 @@ class Conn:
 
 
 a=Conn()
-b=a.find_forward_node("MAGNET2004")
-a.plot_connection("MAGNET2004")
+#a.core()
+i=1
+for x,y,k in a.bat_display():
+    fig=plt.subplot(3,3,i)
+    fig.plot(x,y)
+    fig.set_title(k)
+    i+=1
+    if i>=10:
+        i=1
+        plt.savefig("data/image/my"+k+".png")
+        plt.close("all")
 
-#
+
 
 
 
